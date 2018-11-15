@@ -11,10 +11,10 @@ ENV LANGUAGE en_US.UTF-8
 CMD ["/sbin/my_init"]
 
 # Configure user nobody to match unRAID's settings
-RUN usermod -u 99 nobody && \
-    usermod -g 100 nobody && \
-    usermod -d /home nobody && \
-    chown -R nobody:users /home
+#RUN usermod -u 99 nobody && \
+#    usermod -g 100 nobody && \
+#    usermod -d /home nobody && \
+#    chown -R nobody:users /home
 
 # Install VLC
 RUN \
@@ -39,15 +39,15 @@ COPY rc.local /etc/rc.local
 RUN chmod a+x /etc/rc.local && \
 	mkdir -p /config/logs && \
 	cp -n /server.properties.new /config/server.properties && \
-	chown -R nobody:users /config && \
+#	chown -R nobody:users /config && \
 	mkdir /conversionPath && \
-	chown -R nobody:users /conversionPath && \
+#	chown -R nobody:users /conversionPath && \
 	mkdir /videos && \
-	chown -R nobody:users /videos
+#	chown -R nobody:users /videos
 
 RUN mkdir /etc/service/airvideohd
 ADD airvideohd.sh /etc/service/airvideohd/run
-RUN chown nobody:users /etc/service/airvideohd/run && \
+#RUN chown nobody:users /etc/service/airvideohd/run && \
     chmod a+x /etc/service/airvideohd/run
 	
 EXPOSE 45633
