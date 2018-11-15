@@ -2,9 +2,6 @@
 
 This is an Unofficial Docker container for InMethod's Air Video Server HD based on freely available Linux binaries at [http://www.inmethod.com](http://www.inmethod.com)
 
-# madcatsu/airvideohd
-
-[![](https://images.microbadger.com/badges/version/madcatsu/airvideohd.svg)](https://microbadger.com/images/madcatsu/airvideohd "Get your own version badge on microbadger.com")[![](https://images.microbadger.com/badges/image/madcatsu/airvideohd.svg)](https://microbadger.com/images/madcatsu/airvideohd "Get your own image badge on microbadger.com")[![](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://hub.docker.com/r/madcatsu/airvideohd/builds/)
 
 Air Video HD allows you to watch videos streamed instantly from your computer on your iPhone, iPad, iPod touch or Apple TV.
 
@@ -134,11 +131,6 @@ userAccounts3.userName = harry
 userAccounts3.password = potter <---- change this!
 ```
 
-### TODO
-We'd like to improve this container further so we've listed here a couple of future Roadmap items under consideration:
-
-+ Version specification - Choose the latest or a specific numbered version of the Air Video Server HD binary to run
-+ Share creation via ENV - Setup one or more media folders with open or limited access using environment vars
 
 #### Thanks
-This work is largely based off the existing projects put together by the Linuxserver.io guys. Go buy them a beer!
+This work is largely based off the existing projects put together by the Linuxserver.io guys and madcatsu.  Go buy them a beer!
