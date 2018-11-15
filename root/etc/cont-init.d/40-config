@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bash
+
+# copy config
+[[ ! -e /config/Server.properties ]] && \
+	cp /defaults/Server.properties /config/Server.properties
+
+
+# configure hostname
+sed -i -e \
+	"s/computerName\s*=\s*AirVideoServerHD/computerName = $HOSTNAME/g" \
+	/config/Server.properties
+
+# permissions
+chown -R abc:abc \
+	/config \
+	/opt/airvideohd \
+	/transcode
+chmod +x \
+	/opt/airvideohd/AirVideoServerHD
