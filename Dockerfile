@@ -1,57 +1,71 @@
-### Dockerfile for airvideohd
-FROM phusion/baseimage:0.9.22
-MAINTAINER dmaxwell351 <dmaxwell351@sent.com>
-
-ENV HOME /root
-ENV DEBIAN_FRONTEND noninteractive
-ENV LC_ALL C.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-
-CMD ["/sbin/my_init"]
-
-# Configure user nobody to match unRAID's settings
-#RUN usermod -u 99 nobody && \
-#    usermod -g 100 nobody && \
-#    usermod -d /home nobody && \
-#    chown -R nobody:users /home
-
-# Install VLC
-RUN \
-  apt-get update && \
-  apt-get install -y vlc-nox && \
-  apt-get install -y wget && \
-  apt-get install -y bzip2 && \
-  apt-get clean -y && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Download AirVideoHD
-RUN wget -O /AirVideoServerHD-2.2.3.tar.bz2 "https://s3.amazonaws.com/AirVideoHD/Download/AirVideoServerHD-2.2.3.tar.bz2"
-
-# Decompress AirVideoHD
-RUN tar jxf /AirVideoServerHD-2.2.3.tar.bz2
-
-# Copy default 
-COPY server.properties /server.properties.new
-
-### Configure Service Startup
-COPY rc.local /etc/rc.local
-RUN chmod a+x /etc/rc.local && \
-	mkdir -p /config/logs && \
-	cp -n /server.properties.new /config/server.properties && \
-#	chown -R nobody:users /config && \
-	mkdir /conversionPath && \
-#	chown -R nobody:users /conversionPath && \
-	mkdir /videos && \
-#	chown -R nobody:users /videos
-
-RUN mkdir /etc/service/airvideohd
-ADD airvideohd.sh /etc/service/airvideohd/run
-#RUN chown nobody:users /etc/service/airvideohd/run && \
-    chmod a+x /etc/service/airvideohd/run
-	
-EXPOSE 45633
-
-VOLUME ["/config", "/conversionPath", "/videos"]
-
-### END
+# have to use jessie because AirVideoHD requires vlc 2.x, vlc 3 is not supported.
+FROM debian:jessie-slim
+# Build arguments
+ARG VCS_REF
+ARG VERSION
+ARG AVSERVERHD_VERSION="2.2.3"
+ARG DEBIAN_FRONTEND="noninteractive"
+# Set label metadata
+LABEL org.label-schema.name="airvideohd-server-daemon" \
+      org.label-schema.description="Alpine Linux Docker Container running AirVideo HD Server streamer / transcoder" \
+      org.label-schema.usage="https://github.com/madcatsu/docker-airvideohd-server-daemon/blob/master/README.md" \
+      org.label-schema.url="https://github.com/madcatsu/docker-airvideohd-server-daemon" \
+      org.label-schema.version=$VERSION \
+      org.label-schema.vcs-url="https://github.com/madcatsu/docker-airvideohd-server-daemon" \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.schema-version="1.0"
+# global environment settings
+ENV LANG C.UTF-8
+# Install packages
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+  avahi-daemon \
+  bash \
+  bsdtar \
+  curl \
+  dbus \
+  python3-minimal \
+  python3-pkg-resources \
+  python3-pip \
+  python3-setuptools \
+  wget \
+  vlc-nox && \
+  # Install Chaperone
+    pip3 install -U --upgrade \
+      pip \
+      setuptools \
+      wheel \
+      chaperone && \
+# Prep directories
+  mkdir -p \
+    /config \
+    /defaults \
+    /logs \
+    /media \
+    /opt/airvideohd \
+    /transcode \
+    /tmp/packages \
+    /var/run/avahi-daemon \
+    /var/run/dbus && \
+  wget -qO- \
+    "https://s3.amazonaws.com/AirVideoHD/Download/AirVideoServerHD-${AVSERVERHD_VERSION}.tar.bz2" \
+    | bsdtar -xf- -C /tmp/packages && \
+  mv \
+    /tmp/packages/AirVideoServerHD \
+    /tmp/packages/Resources \
+    /opt/airvideohd && \
+  mv \
+    /tmp/packages/Server.properties \
+    /defaults && \
+# Cleanup
+  apt-get clean && \
+  apt-get autoclean && \
+  rm -rf \
+	  /tmp/packages \
+    /var/lib/apt/lists/*
+# copy local files
+COPY /root /
+# ports and volumes
+EXPOSE 45633 45633/udp 5353/udp
+VOLUME ["/config","/media","/logs","/transcode"]
+ENTRYPOINT ["/usr/local/bin/chaperone","--default-home","/config"]
