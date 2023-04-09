@@ -19,6 +19,27 @@ docker create --name=<container name> \
 -p 45633:45633/udp
 ```
 
+### Podman volume create
+```
+podman volume create airvideohd_config
+podman volume create airvideohd_transcoding
+```
+
+### Podman run
+```
+podman run --name=airvideohd \
+-e PUID=1000 \
+-e PGID=1000 \
+-v trans_ovpn_data:/media \
+-v airvideohd_config:/config \
+-v airvideohd_transcoding:/transcode \
+-p 5353:5353/udp \
+-p 45633:45633 \
+-p 45633:45633/udp \
+--restart always \
+darendarrow/airvideohd:latest
+```
+
 **Transcoding:** It's worthwhile noting that if you expect ideal performance for transcoding of videos from one format to those natively supported on your iOS device, the transcoding folder should be placed on storage that is suitable for this purpose. Flash or RAM disk are ideal but not necessary, so expect your mileage to vary depending on the source video quality.
 
 ### User / Group Environment Variables
