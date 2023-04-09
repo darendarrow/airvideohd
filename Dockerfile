@@ -1,4 +1,4 @@
-FROM lsiobase/ubuntu:jammy
+FROM lsiobase/ubuntu:xenial
 
 # package versions
 ARG AVSERVERHD_VERSION="2.2.3"
@@ -9,12 +9,7 @@ ENV LANG C.UTF-8
 # build environment settings
 ARG DEBIAN_FRONTEND="noninteractive"
 
-# install packages
-RUN \
- apt-get update && \
- apt-get install -y software-properties-common && \
- add-apt-repository ppa:videolan/stable-daily -y 
-
+# install packages 
 RUN \
  apt-get update && \
  apt-get install -y \
