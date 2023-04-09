@@ -1,4 +1,4 @@
-FROM lsiobase/ubuntu:xenial
+FROM lsiobase/ubuntu:jammy
 
 # package versions
 ARG AVSERVERHD_VERSION="2.2.3"
