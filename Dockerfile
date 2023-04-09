@@ -11,6 +11,7 @@ ARG DEBIAN_FRONTEND="noninteractive"
 
 # install packages
 RUN \
+ add-apt-repository ppa:videolan/stable-daily -y && \
  apt-get update && \
  apt-get install -y \
 	--no-install-recommends \
