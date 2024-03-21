@@ -15,7 +15,8 @@ RUN \
  apt-get update && \
  apt-get install -y \
 	--no-install-recommends \
-	vlc-nox && \
+	vlc-bin \
+  vlc-plugin-base && \
  apt-get install -y \
 	avahi-daemon \
 	bzip2 \
