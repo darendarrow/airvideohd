@@ -12,6 +12,10 @@ ARG DEBIAN_FRONTEND="noninteractive"
 
 # install packages 
 RUN \
+ add-apt-repository ppa:savoury1/graphics && \
+ add-apt-repository ppa:savoury1/multimedia && \
+ add-apt-repository ppa:savoury1/ffmpeg4 && \
+ add-apt-repository ppa:savoury1/vlc3 && \
  apt-get update && \
  apt-get install -y \
 	--no-install-recommends \
