@@ -13,7 +13,8 @@ ARG DEBIAN_FRONTEND="noninteractive"
 # install packages 
 RUN \
  apt-get update && \
- apt-get install -y software-properties-common
+ apt-get install -y software-properties-common && \
+ apt-cache search vlc
 
 RUN \
 # add-apt-repository ppa:savoury1/graphics && \
@@ -23,8 +24,7 @@ RUN \
  apt-get update && \
  apt-get install -y \
 	--no-install-recommends \
-	vlc-bin \
-  vlc-plugin-base && \
+	vlc && \
  apt-get install -y \
 	avahi-daemon \
 	bzip2 \
