@@ -12,7 +12,10 @@ ARG DEBIAN_FRONTEND="noninteractive"
 
 # install packages 
 RUN \
+ apt-get update && \
  apt-get install -y software-properties-common && \
+
+RUN \
  add-apt-repository ppa:savoury1/graphics && \
  add-apt-repository ppa:savoury1/multimedia && \
  add-apt-repository ppa:savoury1/ffmpeg4 && \
