@@ -13,7 +13,7 @@ ARG DEBIAN_FRONTEND="noninteractive"
 # install packages 
 RUN \
  apt-get update && \
- apt-get install -y software-properties-common && \
+ apt-get install -y software-properties-common
 
 RUN \
  add-apt-repository ppa:savoury1/graphics && \
